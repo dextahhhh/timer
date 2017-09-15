@@ -19,7 +19,7 @@
 	<style type="text/css">
 	
 		#wrapper {
-			margin-top: 10%;
+			margin-top: 5%;
 		}
 	
 	</style>
@@ -28,9 +28,28 @@
 
   <body ng-app="panel" ng-controller="panelCtrl">
 	<div id="wrapper">
+		
 		<div class="container">
-			<button type="button" class="btn btn-primary" ng-click="panelModule.monitor(this);">Monitor</button>
+			<div class="row">
+				<div class="col-lg-6">
+					<div id="panel">
+						<button type="button" class="btn btn-primary" ng-click="panelModule.monitor(this);">Monitor</button>					
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<h3>Logs</h3>
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr><th>No</th><th>Time Remaning</th><th>Time Elapsed</th></tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="log in logs"><td></td><td></td><td></td></tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
+		
 	</div>
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -54,6 +73,12 @@
 				
 				self.monitor = function(scope) {
 					window.open("monitor.html","_blank","");
+				};
+				
+				self.list = function(scope) {
+				
+
+				
 				};
 			
 			}
