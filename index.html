@@ -8,37 +8,69 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>The Big Picture - Start Bootstrap Template</title>
+    <title>La Union Henio</title>
 
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="css/the-big-picture.css" rel="stylesheet">
+	
+	<style type="text/css">
+	
+		#wrapper {
+			margin-top: 10%;
+		}
+	
+	</style>
 
   </head>
 
-  <body>
-
-    <!-- Navigation -->
-    
-
-    <!-- Page Content -->
-    <section>
-      
-       
-        	
-			<h1>LA UNION HENIO</h1>
-            <p style="font-size:250px">250</p>
-     
-       
-      
-    </section>
-
+  <body ng-app="panel" ng-controller="panelCtrl">
+	<div id="wrapper">
+		<div class="container">
+			<button type="button" class="btn btn-primary" ng-click="panelModule.monitor(this);">Monitor</button>
+		</div>
+	</div>
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/popper/popper.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="angularjs/angular.min.js"></script>
+	
+	<script type="text/javascript">
+		
+		var app = angular.module('panel',[]);
+		
+		app.factory('panelModule',function($http) {
+			
+			function panel() {
+			
+				var self = this;
+				
+				self.data = function(scope) {
+				
+				};
+				
+				self.monitor = function(scope) {
+					window.open("monitor.html","_blank","");
+				};
+			
+			}
+			
+			return new panel();
+			
+		});
+		
+		app.controller('panelCtrl',function($scope,panelModule) {
+			
+			panelModule.data(scope);
+			
+			$scope.panelModule = panelModule;
+		
+		});
+		
+	</script>
 
   </body>
 
