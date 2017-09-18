@@ -28,28 +28,31 @@
 
   <body ng-app="panel" ng-controller="panelCtrl">
 	<div id="wrapper">
-		
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-6">
-					<div id="panel">
-						<button type="button" class="btn btn-primary" ng-click="panelModule.monitor(this);">Monitor</button>					
-					</div>
-				</div>
-				<div class="col-lg-6">
-					<h3>Logs</h3>
-					<table class="table table-bordered table-striped">
-						<thead>
-							<tr><th>No</th><th>Time Remaning</th><th>Time Elapsed</th></tr>
-						</thead>
-						<tbody>
-							<tr ng-repeat="log in logs"><td></td><td></td><td></td></tr>
-						</tbody>
-					</table>
-				</div>
+		<div class="row no-gutters">
+			<div class="col">
+				<form class="form-inline">
+					<div class="form-group mx-sm-3">
+						<label>Time&nbsp;</label>
+						<input type="text" class="form-control" ng-model="time">
+					</div>						
+					<button type="button" class="btn btn-primary" ng-click="panelModule.set(this);">Set</button>&nbsp;
+					<button type="button" class="btn btn-primary" ng-click="panelModule.reset(this);">Reset</button>&nbsp;
+					<button type="button" class="btn btn-primary" ng-click="panelModule.start(this);">Start</button>&nbsp;			
+					<button type="button" class="btn btn-primary" ng-click="panelModule.stop(this);">Stop</button>&nbsp;
+					<button type="button" class="btn btn-primary" ng-click="panelModule.monitor(this);">Monitor</button>					
+				</form>
 			</div>
-		</div>
-		
+			<div class="col">
+				<form class="form-inline">
+					<div class="form-group mx-sm-3">
+						<label>Answer&nbsp;</label>
+						<input type="text" class="form-control" ng-model="answer">
+					</div>							
+					<button type="button" class="btn btn-primary" ng-click="panelModule.showAnswer(this);">Show Answer</button>&nbsp;		
+					<button type="button" class="btn btn-primary" ng-click="panelModule.hideAnswer(this);">Hide Answer</button>						
+				</form>
+			</div>
+		</div>		
 	</div>
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
@@ -61,13 +64,22 @@
 		
 		var app = angular.module('panel',[]);
 		
-		app.factory('panelModule',function($http) {
+		app.factory('panelModule',function($http,$timeout) {
 			
 			function panel() {
 			
 				var self = this;
 				
 				self.data = function(scope) {
+					
+					scope.time = '02:00.00';
+					localStorage.countDownInit = scope.time;
+					localStorage.countUpInit = '00:00.00';
+					localStorage.countDown = localStorage.countDownInit;
+					localStorage.countUp = localStorage.countUpInit;
+					localStorage.timer = 'stop';
+					localStorage.answer = '';
+					localStorage.showAnswer = false;
 				
 				};
 				
@@ -75,10 +87,52 @@
 					window.open("monitor.html","_blank","");
 				};
 				
-				self.list = function(scope) {
+				self.start = function(scope) {
 				
+					localStorage.timer = 'start';
+					console.log(localStorage.timer);					
+				
+				};
+				
+				self.stop = function(scope) {
+				
+					localStorage.timer = 'stop';
+					console.log(localStorage.timer);
+				
+				};
 
+				self.set = function(scope) {
+
+					localStorage.countDownInit = scope.time;
+					self.reset(scope);
+					
+				};				
 				
+				self.reset = function(scope) {
+
+					localStorage.timer = 'reset';
+					localStorage.answer = '';
+					scope.answer = localStorage.answer;			
+					console.log(localStorage.timer);
+				
+				};
+				
+				self.showAnswer = function(scope) {
+				
+					localStorage.answer = scope.answer;
+					localStorage.showAnswer = 'show';
+				
+				};
+				
+				self.hideAnswer = function(scope) {
+
+					localStorage.answer = scope.answer;				
+					localStorage.showAnswer = 'hide';					
+				
+				};				
+				
+				self.list = function(scope) {
+
 				};
 			
 			}
@@ -89,7 +143,7 @@
 		
 		app.controller('panelCtrl',function($scope,panelModule) {
 			
-			panelModule.data(scope);
+			panelModule.data($scope);
 			
 			$scope.panelModule = panelModule;
 		

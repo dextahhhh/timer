@@ -25,9 +25,10 @@
 
     <!-- Page Content -->
     <section>
-			<h1 style="color: #828282;">LA UNION HENIO</h1>
-			<p style="color: #828282; font-size: 20px;">Elimination</p>
-            <p style="color: #0b0b0b; font-size: 250px; margin-top: 5%;">250</p>
+			<h1 style="color: #828282; font-size: 50px;"><span ng-show="true">SKRABILOKO</span></h1>
+			<p style="color: #828282; font-size: 30px;"><span ng-show="true"></span></p>
+            <p style="color: #0b0b0b; font-size: 300px; margin-top: -70px;"><span ng-show="!showAnswer">{{countDown}}</span><p ng-show="showAnswer" style="font-size: 110px!important; margin-top: 10%;">{{answer}}</p></p>
+            <p style="color: #828282; font-size: 150px; margin-top: -80px;"><span ng-show="!showAnswer">{{countUp}}</span></p>
     </section>
 
     <!-- Bootstrap core JavaScript -->
@@ -40,10 +41,134 @@
 		
 		var app = angular.module('monitor',[]);
 		
-		app.controller('monitorCtrl',function($scope) {
+		app.factory('monitorModule',function($http,$timeout) {
 		
+			function monitor() {
+			
+				var self = this;
+				
+				self.start = function(scope) {
+				
+					update(scope);
+				
+					function update(scope) {
+					
+					/* down */
+					var time = localStorage.countDown;
+					/* up */
+					var time1 = localStorage.countUp;					
+					
+					/* down */
+					var ss = time.split(":");
+					/* up */					
+					var ss1 = time1.split(":");
+					
+					/* down */
+					var dt = new Date();
+					/* up */
+					var dt1 = new Date();				
+					
+					/* down */
+					dt.setHours(0);
+					dt.setMinutes(ss[0]);
+					dt.setSeconds((ss[1].split("."))[0]);
+					/* up */
+					dt1.setHours(0);
+					dt1.setMinutes(ss1[0]);
+					dt1.setSeconds((ss1[1].split("."))[0]);					
+					
+					/* down */
+					var l = 0;
+					if ((ss[1].split("."))[1] == '99') l = 1000;
+					/* up */
+					var l1 = 0;
+					if ((ss1[1].split("."))[1] == '00') l1 = 1000;				
+					
+					/* down */
+					var ms = ((ss[1].split("."))[1] == '00')?'99':parseInt((ss[1].split("."))[1])-1;
+					var mss = ms.toString();
+					if (mss.length == 1) mss = '0'+mss;
+					/* up */
+					var ms1 = ((ss1[1].split("."))[1] == '99')?'00':parseInt((ss1[1].split("."))[1])+1;
+					var mss1 = ms1.toString();
+					if (mss1.length == 1) mss1 = '0'+mss1;					
+					
+					/* down */
+					var dt2 = new Date(dt.valueOf() - l);
+					var temp = dt2.toTimeString().split(" ");
+					var ts =  temp[0].split(":");
+					/* up */
+					var dt21 = new Date(dt1.valueOf() + l1);
+					var temp1 = dt21.toTimeString().split(" ");
+					var ts1 =  temp1[0].split(":");					
+					
+					/* down */
+					scope.countDown = ts[1]+":"+ts[2]+"."+mss;
+					localStorage.countDown = scope.countDown;
+					/* up */
+					scope.countUp = ts1[1]+":"+ts1[2]+"."+mss1;
+					localStorage.countUp = scope.countUp;					
+					
 
+					if (ts[1]+":"+ts[2] == '00:00') {
+						scope.countDown = localStorage.countUpInit;
+						scope.countUp = localStorage.countDownInit;
+						localStorage.timer = 'stop';
+					}			
+					
+					if ((scope.countDown != localStorage.countUpInit) && (localStorage.timer != 'stop')) $timeout(function() { update(scope) },10);				
+					
+					};				
+				
+				};				
+			
+			};
+			
+			return new monitor();
 		
+		});
+		
+		app.controller('monitorCtrl',function($scope,monitorModule) {
+		
+			$scope.countDown = localStorage.countDown;
+			$scope.countUp = localStorage.countUpInit;
+			$scope.answer = localStorage.answer;
+			
+			setInterval(function() {
+				
+				
+				
+				if (localStorage.timer == 'start') {
+					
+					localStorage.timer = 'count';
+					monitorModule.start($scope);
+					
+				};
+				
+				if (localStorage.timer == 'reset') {
+					
+					$scope.countDown = localStorage.countDownInit;
+					$scope.countUp = localStorage.countUpInit;
+					$scope.answer = localStorage.answer;					
+					$scope.$apply();
+					localStorage.countDown = localStorage.countDownInit;
+					localStorage.countUp = localStorage.countUpInit;
+					localStorage.timer = 'stop';
+						
+				};
+				
+				if (localStorage.showAnswer == 'show') {
+					$scope.answer = localStorage.answer;
+					$scope.showAnswer = true;
+					$scope.$apply();
+				} else {
+					$scope.answer = localStorage.answer;				
+					$scope.showAnswer = false;
+					$scope.$apply();				
+				}
+				
+			},200);
+			
 		});
 		
 	</script>
