@@ -25,8 +25,8 @@
 
     <!-- Page Content -->
     <section>
-			<h1 style="color: #828282; font-size: 50px;"><span ng-show="true">SKRABILOKO</span></h1>
-			<p style="color: #828282; font-size: 30px;"><span ng-show="true"></span></p>
+			<h1 style="color: #828282; font-size: 50px;"><span ng-show="true">La Union Henio</span></h1>
+			<p style="color: #828282; font-size: 30px;"><span ng-show="true">Finals</span></p>
             <p style="color: #0b0b0b; font-size: 300px; margin-top: -70px;"><span ng-show="!showAnswer">{{countDown}}</span><p ng-show="showAnswer" style="font-size: 110px!important; margin-top: 10%;">{{answer}}</p></p>
             <p style="color: #828282; font-size: 150px; margin-top: -80px;"><span ng-show="!showAnswer">{{countUp}}</span></p>
     </section>
@@ -114,13 +114,35 @@
 						scope.countDown = localStorage.countUpInit;
 						scope.countUp = localStorage.countDownInit;
 						localStorage.timer = 'stop';
-					}			
+					}
+					
+					if ((localStorage.timer == 'stop') && (ts[1]+":"+ts[2] != '00:00')) self.countDownStop(scope);
+					if (ts[1]+":"+ts[2] == '00:14') self.countDownStart(scope);
 					
 					if ((scope.countDown != localStorage.countUpInit) && (localStorage.timer != 'stop')) $timeout(function() { update(scope) },10);				
 					
 					};				
 				
-				};				
+				};
+
+				self.countDownStart = function(scope) {
+
+					scope.countDownVoice.play();				
+					
+				};
+				
+				self.countDownReset = function(scope) {
+
+					scope.countDownVoice.currentTime = 0;				
+				
+				};
+				
+				self.countDownStop = function(scope) {
+				
+					scope.countDownVoice.pause();
+					scope.countDownVoice.currentTime = 0;
+				
+				};
 			
 			};
 			
@@ -134,9 +156,10 @@
 			$scope.countUp = localStorage.countUpInit;
 			$scope.answer = localStorage.answer;
 			
+			$scope.countDownVoice = new Audio('countdown.mp3');			
+			
 			setInterval(function() {
-				
-				
+
 				
 				if (localStorage.timer == 'start') {
 					
@@ -154,6 +177,7 @@
 					localStorage.countDown = localStorage.countDownInit;
 					localStorage.countUp = localStorage.countUpInit;
 					localStorage.timer = 'stop';
+					monitorModule.countDownReset(scope);					
 						
 				};
 				
