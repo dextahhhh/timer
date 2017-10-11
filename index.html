@@ -37,9 +37,7 @@
 					</div>						
 					<button type="button" class="btn btn-primary" ng-click="panelModule.set(this);">Set</button>&nbsp;
 					<button type="button" class="btn btn-primary" ng-click="panelModule.reset(this);">Reset</button>&nbsp;
-					<button type="button" class="btn btn-primary" ng-click="panelModule.start(this);">Start</button>&nbsp;			
-					<button type="button" class="btn btn-primary" ng-click="panelModule.stop(this);">Stop</button>&nbsp;
-					<button type="button" class="btn btn-primary" ng-click="panelModule.monitor(this);">Monitor</button>					
+					<button type="button" class="btn btn-primary" ng-click="panelModule.monitor(this);">Monitor</button>		
 				</form>
 			</div>
 			<div class="col">
@@ -51,6 +49,14 @@
 					<button type="button" class="btn btn-primary" ng-click="panelModule.showAnswer(this);">Show Answer</button>&nbsp;		
 					<button type="button" class="btn btn-primary" ng-click="panelModule.hideAnswer(this);">Hide Answer</button>						
 				</form>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-12">
+				<div style="margin-top: 25px; margin-left: 55px;">
+					<button type="button" class="btn btn-primary" ng-click="panelModule.start(this);" style="margin-right: 75px;">Start</button>			
+					<button type="button" class="btn btn-primary" ng-click="panelModule.stop(this);">Stop</button>&nbsp;
+				</div>
 			</div>
 		</div>		
 	</div>
@@ -72,7 +78,7 @@
 				
 				self.data = function(scope) {
 					
-					scope.time = '02:00.00';
+					scope.time = '03:00.00';
 					localStorage.countDownInit = scope.time;
 					localStorage.countUpInit = '00:00.00';
 					localStorage.countDown = localStorage.countDownInit;
