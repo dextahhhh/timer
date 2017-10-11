@@ -114,13 +114,35 @@
 						scope.countDown = localStorage.countUpInit;
 						scope.countUp = localStorage.countDownInit;
 						localStorage.timer = 'stop';
-					}			
+					}
+					
+					if ((localStorage.timer == 'stop') && (ts[1]+":"+ts[2] != '00:00')) self.countDownStop(scope);
+					if (ts[1]+":"+ts[2] == '00:14') self.countDownStart(scope);
 					
 					if ((scope.countDown != localStorage.countUpInit) && (localStorage.timer != 'stop')) $timeout(function() { update(scope) },10);				
 					
 					};				
 				
-				};				
+				};
+
+				self.countDownStart = function(scope) {
+
+					scope.countDownVoice.play();				
+					
+				};
+				
+				self.countDownReset = function(scope) {
+
+					scope.countDownVoice.currentTime = 0;				
+				
+				};
+				
+				self.countDownStop = function(scope) {
+				
+					scope.countDownVoice.pause();
+					scope.countDownVoice.currentTime = 0;
+				
+				};
 			
 			};
 			
@@ -134,9 +156,10 @@
 			$scope.countUp = localStorage.countUpInit;
 			$scope.answer = localStorage.answer;
 			
+			$scope.countDownVoice = new Audio('countdown.mp3');			
+			
 			setInterval(function() {
-				
-				
+
 				
 				if (localStorage.timer == 'start') {
 					
@@ -154,6 +177,7 @@
 					localStorage.countDown = localStorage.countDownInit;
 					localStorage.countUp = localStorage.countUpInit;
 					localStorage.timer = 'stop';
+					monitorModule.countDownReset(scope);					
 						
 				};
 				
